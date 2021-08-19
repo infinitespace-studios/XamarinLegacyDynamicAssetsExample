@@ -1,0 +1,48 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.810.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LegacyDynamicAssetsExample", "LegacyDynamicAssetsExample\LegacyDynamicAssetsExample.csproj", "{82445622-D51F-4246-A763-C3009A44B31A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Features", "Features", "{B107811B-FC25-472A-B3AF-441F23035187}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{ADA89487-1D38-456D-B1F5-96AEFEAD5B96}"
+	ProjectSection(SolutionItems) = preProject
+		global.json = global.json
+		Targets\DynamicFeature.targets = Targets\DynamicFeature.targets
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssetsFeature", "AssetsFeature\AssetsFeature.csproj", "{EABACE4D-E999-48FA-B417-ECD29C8AB6E5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlayCoreHelperBinding", "PlayCoreHelperBinding\PlayCoreHelperBinding.csproj", "{0FA1DE56-E4A5-451C-B5D4-D3BEB5B01AEE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{82445622-D51F-4246-A763-C3009A44B31A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{82445622-D51F-4246-A763-C3009A44B31A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{82445622-D51F-4246-A763-C3009A44B31A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{82445622-D51F-4246-A763-C3009A44B31A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EABACE4D-E999-48FA-B417-ECD29C8AB6E5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EABACE4D-E999-48FA-B417-ECD29C8AB6E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EABACE4D-E999-48FA-B417-ECD29C8AB6E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EABACE4D-E999-48FA-B417-ECD29C8AB6E5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0FA1DE56-E4A5-451C-B5D4-D3BEB5B01AEE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0FA1DE56-E4A5-451C-B5D4-D3BEB5B01AEE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0FA1DE56-E4A5-451C-B5D4-D3BEB5B01AEE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0FA1DE56-E4A5-451C-B5D4-D3BEB5B01AEE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3FD946F8-2976-44CE-914C-84C7A94AA841}
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{EABACE4D-E999-48FA-B417-ECD29C8AB6E5} = {B107811B-FC25-472A-B3AF-441F23035187}
+	EndGlobalSection
+EndGlobal

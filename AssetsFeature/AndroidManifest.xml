@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools" xmlns:dist="http://schemas.android.com/apk/distribution" android:versionCode="1" android:versionName="1.0" package="com.infinitespacestudios.legacydynamicassetsexample" featureSplit="assetsfeature" android:isFeatureSplit="true">
+  <dist:module dist:title="@string/assetsfeature" dist:instant="false">
+    <dist:delivery>
+      <dist:on-demand />
+    </dist:delivery>
+    <dist:fusing dist:include="false" />
+  </dist:module>
+  <uses-sdk android:minSdkVersion="21" android:targetSdkVersion="30" />
+  <application android:hasCode="false" tools:replace="android:hasCode" />
+</manifest>

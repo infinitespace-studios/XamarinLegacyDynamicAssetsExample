@@ -1,0 +1,5 @@
+﻿<resources>
+    <string name="app_name">LegacyDynamicAssetsExample</string>
+    <string name="action_settings">Settings</string>
+    <string name="assetsfeature">assetsfeature</string>
+</resources>
