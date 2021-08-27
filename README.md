@@ -61,12 +61,12 @@ The `package` attriute on the `manifest` element MUST match the value of the mai
 And finally the `split` value is the name which the "Feature" will be called in the final package
 and when you install via the `AssetPackManager` API. This is not user facing. 
 
-## Installing a Feature
+## Installing an Asset Pack
 
-You need to use the `SplitInstallManager` to install features, this is available in the 
+You need to use the `AssetPackManager` to install asset packs, this is available in the 
 `Xamarin.Google.Android.Play.Core"` NuGet Package. However due to the API using Java Generics you cannot 
-use all the `SplitInstallManager` features directly. This is why we have a `PlayCoreHelperBinding` project.
-This project contains a non generic Java Wrapper around the `SplitInstallManager` which allows us to 
+use all the `AssetPackManager` directly. This is why we have a `PlayCoreHelperBinding` project.
+This project contains a non generic Java Wrapper around the `AssetPackManager` which allows us to 
 capture events from the `OnStatusUpdate` method. This lets us get feedback while we are installing
 "Features".
 
@@ -78,43 +78,34 @@ This is so `Google.Play.Core` can hook into the application lifecycle.
 Next we need to define the following in the `Activity` where we want to surface installing features.
 
 ```csharp
-ISplitInstallManager manager;
-SplitInstallStateUpdatedListenerWrapper listener;
+IAssetPackManager manager;
+AssetPackStateUpdateListenerWrapper listener;
 ```
 
-The `ISplitInstallManager` is the C# version of the `SplitInstallManager` Java interface. The
-`SplitInstallStateUpdatedListenerWrapper` class is the C# version of our `SplitInstallStateUpdatedListenerWrapper`
-which comes from `PlayCoreHelperBinding`. This is the class which wraps the Java `SplitInstallStateUpdatedListener` from  the geneeric based google API and exposes a non generic API.
+The `IAssetPackManager` is the C# version of the `AssetPackManager` Java interface. The
+`AssetPackStateUpdateListenerWrapper` class is the C# version of our `AssetPackStateUpdateListenerWrapper`
+which comes from `PlayCoreHelperBinding`. This is the class which wraps the Java `AssetPackStateUpdateListener` from  the generic based google API and exposes a non generic API.
 
 We now need to create both of these classes in the `OnCreate` method. This can probably be done elsewhere,
 but for the example we do this in `OnCreate`.
 
 ```csharp
-#if DEBUG
-    var fakeManager = FakeSplitInstallManagerFactory.Create(this);
-    manager = fakeManager;
-#else
-    manager = SplitInstallManagerFactory.Create (this);
-#endif
+    manager = AssetPackManagerFactory.GetInstance (this);
     // Create our Wrapper and set up the event handler.
-    listener = new SplitInstallStateUpdatedListenerWrapper();
+    listener = new AssetPackStateUpdateListenerWrapper();
     listener.StateUpdate += Listener_StateUpdate;
 ```
 
-Note we can create two different `SplitInstallManager` instances. One for release the other for debug.
-The debug one will look for features in a special location on the device which `bundletool` deploys
-them to. This allows you to test installing features without having to publish your `aab` to google. 
-
-The code that creates the `SplitInstallStateUpdatedListenerWrapper` is straight forward. It creates
+The code that creates the `AssetPackStateUpdateListenerWrapper` is straight forward. It creates
 the class and then hooks up the `StateUpdate` event. 
 
-For the `StateUpdate` event to work we need to hook the `SplitInstallStateUpdatedListenerWrapper` to 
-the `SplitInstallManager`. This is done in the `OnResume` override method 
+For the `StateUpdate` event to work we need to hook the `AssetPackStateUpdateListenerWrapper` to 
+the `AssetPackManager`. This is done in the `OnResume` override method 
 
 ```csharp
 protected override void OnResume()
 {
-    // regsiter our Listener Wrapper with the SplitInstallManager so we get feedback.
+    // regsiter our Listener Wrapper with the AssetPackManager so we get feedback.
     manager.RegisterListener(listener.Listener);
     base.OnResume();
 }
@@ -131,27 +122,22 @@ protected override void OnPause()
 ```
 
 These two snippets are where things differ from the Java examples you will see. Those will 
-create an `SplitInstallStateUpdatedListener` class directly and pass that into the `RegisterListener`
+create an `AssetPackStateUpdateListener` class directly and pass that into the `RegisterListener`
 and `UnregisterListener`. But because we had to use our wrapper we need to pass in the 
 `listener.Listener` value. This is the only real different between C# and Java code. 
 
 Finally you need to hook into then `OnActivityResult` and handle the case where user
 confirmation is required. See the `MainActivty.cs` for an example.
 
-With all that in place you can use the following code to install a "Feature"
+With all that in place you can use the following code to install an asset pack.
 
 ```csharp
-if (!manager.InstalledModules.Contains("assetsfeature"))
+var location = assetPackManager.GetPackLocation ("assetsfeature");
+if (location == null)
 {
-    var builder = SplitInstallRequest.NewBuilder();
-    builder.AddModule("assetsfeature");
-    manager.StartInstall(builder.Build());
+    assetPackManager.Fetch(new string[] { "assetsfeature" });
 }
 ```
 
-This creates a new `SplitInstallRequest` and starts the installation. The value we us for 
-the `AddModule` method MUST match the one we defined for the `featureSplit` attribute in the 
-"Feature" `AndroidManifest.xml` earlier. The same goes for when we use the `InstalledModules`
-to check if something was installed. 
 
 
