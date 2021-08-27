@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using Android.App;
 using Android.OS;
 using Android.Runtime;
@@ -11,6 +12,9 @@ using Xamarin.Google.Android.Play.Core.SplitInstall;
 using Xamarin.Google.Android.Play.Core.SplitInstall.Testing;
 using Xamarin.Google.Android.Play.Core.SplitInstall.Model;
 using Android.Content;
+using Xamarin.Google.Android.Play.Core.Assetpacks;
+using Xamarin.Google.Android.Play.Core.AssetPacks;
+using Xamarin.Google.Android.Play.Core.AssetPacks.Model;
 
 namespace LegacyDynamicAssetsExample
 {
@@ -23,10 +27,10 @@ namespace LegacyDynamicAssetsExample
 		const int REQUEST_USER_CONFIRM_INSTALL_CODE = 101;
 
 		// This is the underlying SplitInstallManager
-		ISplitInstallManager manager;
+		IAssetPackManager assetPackManager;
 		// This is the wrapper SplitInstallListener which allows us
 		// to provide an event to get updates from the ISplitInstallManager.
-		SplitInstallStateUpdatedListenerWrapper listener;
+		AssetPackStateUpdateListenerWrapper listener;
 
 		protected override void OnCreate(Bundle savedInstanceState)
 		{
@@ -40,36 +44,69 @@ namespace LegacyDynamicAssetsExample
 			FloatingActionButton fab = FindViewById<FloatingActionButton>(Resource.Id.fab);
 			fab.Click += FabOnClick;
 
-			// Create a Fake SplitInstallManager when debugging.
-#if DEBUG
-			var fakeManager = FakeSplitInstallManagerFactory.Create(this);
-			//fakeManager.SetShouldNetworkError (true); // uncomment to test network errors
-			manager = fakeManager;
-#else
-            manager = SplitInstallManagerFactory.Create (this);
-#endif
+
+			assetPackManager = AssetPackManagerFactory.GetInstance (this);
 			// Create our Wrapper and set up the event handler.
-			listener = new SplitInstallStateUpdatedListenerWrapper();
+			listener = new AssetPackStateUpdateListenerWrapper();
 			listener.StateUpdate += Listener_StateUpdate;
 		}
 
-		private void Listener_StateUpdate(object sender, SplitInstallStateUpdatedListenerWrapper.StateUpdateEventArgs e)
+		private string GetAbsoluteAssetPath(string assetPack, string relativeAssetPath) {
+			AssetPackLocation assetPackPath = assetPackManager.GetPackLocation(assetPack);
+			string assetsFolderPath = assetPackPath?.AssetsPath() ?? null;
+			if (assetsFolderPath == null) {
+				// asset pack is not ready
+				return null;
+			}
+
+			string assetPath = Path.Combine(assetsFolderPath, relativeAssetPath);
+			return assetPath;
+		}
+
+		private void Listener_StateUpdate(object sender, AssetPackStateUpdateListenerWrapper.AssetPackStateEventArgs e)
 		{
 			var status = e.State.Status();
 			switch (status)
 			{
-				case SplitInstallSessionStatus.Downloading:
+				case AssetPackStatus.Pending:
 					break;
-				case SplitInstallSessionStatus.Downloaded:
+				case AssetPackStatus.Downloading:
+					long downloaded = e.State.BytesDownloaded();
+					long totalSize = e.State.TotalBytesToDownload ();
+					double percent = 100.0 * downloaded / totalSize;
+					Android.Util.Log.Info ("DynamicAssetsExample", $"Dowloading {percent}");
 					break;
-				case SplitInstallSessionStatus.Installing:
+
+				case AssetPackStatus.Transferring:
+					// 100% downloaded and assets are being transferred.
+					// Notify user to wait until transfer is complete.
 					break;
-				case SplitInstallSessionStatus.Installed:
+
+				case AssetPackStatus.Completed:
+					// Asset pack is ready to use.
+					string path = GetAbsoluteAssetPath ("assetsfeature", "Foo.txt");
+					if (path != null) {
+						Android.Util.Log.Info ("DynamicAssetsExample", $"Reading {path}");
+						Android.Util.Log.Info ("DynamicAssetsExample", File.ReadAllText (path));
+					}
 					break;
-				case SplitInstallSessionStatus.RequiresUserConfirmation:
-					// user needs to confirm
-					manager.StartConfirmationDialogForResult(e.State, this, REQUEST_USER_CONFIRM_INSTALL_CODE);
+
+				case AssetPackStatus.Failed:
+					// Request failed. Notify user.
 					break;
+
+				case AssetPackStatus.Canceled:
+					// Request canceled. Notify user.
+					break;
+
+				case AssetPackStatus.WaitingForWifi:
+					// wait for wifi
+					assetPackManager.ShowCellularDataConfirmation (this);
+					break;
+
+				case AssetPackStatus.NotInstalled:
+				// Asset pack is not downloaded yet.
+				break;
 			}
 		}
 
@@ -93,11 +130,10 @@ namespace LegacyDynamicAssetsExample
 		private void FabOnClick(object sender, EventArgs eventArgs)
 		{
 			// Try to install the new feature.
-			if (!manager.InstalledModules.Contains("assetsfeature"))
-			{
-				var builder = SplitInstallRequest.NewBuilder();
-				builder.AddModule("assetsfeature");
-				manager.StartInstall(builder.Build());
+			var location = assetPackManager.GetPackLocation ("assetsfeature");
+			if (location?.AssetsPath () == null) {
+				var states = assetPackManager.GetPackStates(new string[] { "assetsfeature" });
+				assetPackManager.Fetch(new string[] { "assetsfeature" });
 			}
 		}
 
@@ -111,13 +147,13 @@ namespace LegacyDynamicAssetsExample
 		protected override void OnResume()
 		{
 			// regsiter our Listener Wrapper with the SplitInstallManager so we get feedback.
-			manager.RegisterListener(listener.Listener);
+			assetPackManager.RegisterListener(listener.Listener);
 			base.OnResume();
 		}
 
 		protected override void OnPause()
 		{
-			manager.UnregisterListener(listener.Listener);
+			assetPackManager.UnregisterListener(listener.Listener);
 			base.OnPause();
 		}
 

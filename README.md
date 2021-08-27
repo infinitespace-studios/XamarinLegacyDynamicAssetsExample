@@ -46,7 +46,7 @@ The outputs of `PackageAssets` are then passed back to `BuildAssetFeature` which
 those zip files in the `@(AndroidAppBundleModules)` ItemGroup. These will then be included
 in the final `aab` file as dynamic features. 
 
-## Defining a Feature
+## Defining an Asset Pack
 
 To create a feature you need a few things. The first is a `Microsoft.Build.NoTargets` project
 which imports the `Targets\DynamicFeatures.targets` file. See `AssetFeature\AssetFeature.csproj` for an 
@@ -55,17 +55,11 @@ example.
 Next you need an `AndroidManifest.xml` file. This is where you define how they "Feature" will be
 installed via the `dist:module` and `dist:delivery` elements. 
 
-IMPORTANT: The `dist:title` MUST contain a string resource value which exists in the main application
-`strings.xml`. It should NOT reference a resource in the "Feature". This is the value which google will
-use to display to the user before the "Feature" is installed. So it has to exist in the main app. 
-
-The `application` element in this `AndroidManifest.xml` must have the `android:hasCode` value set to 
-`false`. This is because we only support "Dynamic Asset Delivery" features. These only include `Assets`
-and cannot include any `code` or `resources`. 
+IMPORTANT: The `dist:type` MUST be set to `asset-pack`!
 
 The `package` attriute on the `manifest` element MUST match the value of the main application.
-And finally the `featureSplit` value is the name which the "Feature" will be called in the final package
-and when you install via the `SplitInstallManager` API. This is not user facing. 
+And finally the `split` value is the name which the "Feature" will be called in the final package
+and when you install via the `AssetPackManager` API. This is not user facing. 
 
 ## Installing a Feature
 
