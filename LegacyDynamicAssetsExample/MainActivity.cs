@@ -12,7 +12,6 @@ using Xamarin.Google.Android.Play.Core.SplitInstall;
 using Xamarin.Google.Android.Play.Core.SplitInstall.Testing;
 using Xamarin.Google.Android.Play.Core.SplitInstall.Model;
 using Android.Content;
-using Xamarin.Google.Android.Play.Core.Assetpacks;
 using Xamarin.Google.Android.Play.Core.AssetPacks;
 using Xamarin.Google.Android.Play.Core.AssetPacks.Model;
 
@@ -131,8 +130,10 @@ namespace LegacyDynamicAssetsExample
 		{
 			// Try to install the new feature.
 			var location = assetPackManager.GetPackLocation ("assetsfeature");
-			if (location?.AssetsPath () == null) {
+			if (location == null) {
+				// TODO Figure out how to use the GetPackStates.
 				var states = assetPackManager.GetPackStates(new string[] { "assetsfeature" });
+				// TODO add OnComplete Listeners to the Task returned by Fetch.
 				assetPackManager.Fetch(new string[] { "assetsfeature" });
 			}
 		}
