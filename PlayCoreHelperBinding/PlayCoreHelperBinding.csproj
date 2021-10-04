@@ -43,7 +43,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Xamarin.GooglePlayServices.Base" Version="117.6.0" />
-    <PackageReference Include="Xamarin.Google.Android.Play.Core" Version="1.9.1" />
+    <PackageReference Include="Xamarin.Google.Android.Play.Core" Version="1.10.0" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />

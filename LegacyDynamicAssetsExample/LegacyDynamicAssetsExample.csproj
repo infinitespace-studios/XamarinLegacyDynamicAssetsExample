@@ -115,7 +115,7 @@
     <PackageReference Include="Xamarin.Google.Android.Material" Version="1.0.0.1" />
     <PackageReference Include="Xamarin.Essentials" Version="1.6.1" />
     <PackageReference Include="Xamarin.GooglePlayServices.Base" Version="117.6.0" />
-    <PackageReference Include="Xamarin.Google.Android.Play.Core" Version="1.9.1" />
+    <PackageReference Include="Xamarin.Google.Android.Play.Core" Version="1.10.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AssetsFeature\AssetsFeature.csproj">
