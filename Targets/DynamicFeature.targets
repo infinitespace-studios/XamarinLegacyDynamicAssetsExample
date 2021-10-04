@@ -8,7 +8,7 @@
             <_TempExtractionDirectory>$(IntermediateOutputPath)\feature</_TempExtractionDirectory>
         </PropertyGroup>
         <MakeDir Directories="$(_TempExtractionDirectory);$(OutputPath)" />
-        <Exec Command="$(Aapt2ToolPath)\$(Aapt2ToolExe) link --manifest AndroidManifest.xml --proto-format --custom-package $(Package) -A $(AssetsDirectory) -o $(_TempOutputFile)" />
+        <Exec Command="&quot;$(Aapt2ToolPath)\$(Aapt2ToolExe)&quot; link --manifest AndroidManifest.xml --proto-format --custom-package $(Package) -A $(AssetsDirectory) -o $(_TempOutputFile)" />
         <Unzip
             DestinationFolder="$(_TempExtractionDirectory)"
             SourceFiles="$(_TempOutputFile)"
