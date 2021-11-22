@@ -3,11 +3,15 @@ An Example of using Dynamic Asset Delivery with Xamarin Android.
 
 ## Project Layout
 
-The solution is made up of 3 projects.
+The solution is made up of 5 projects.
 
-1. LegacyDynamicAssetsExample. This is the main Xamarin.Android application.
-2. AssetsFeature. This is the project for the Asset only dynamic feature.
-3. PlayCoreHelperbinding. This is a binding for a custom wrapper around the 
+1. OnDemand/OnDemandExample. This is the main Xamarin.Android application for the
+   OnDemand Example.
+2. OnDemand/AssetsFeature. This is the project for the Asset only dynamic feature.
+3. InstallTime/InstallTimeExample. This is the main Xamarin.Android application for the
+   InstallTime Example.
+4. InstallTime/AssetsFeature. This is the project for the Asset only dynamic feature.
+5. PlayCoreHelperbinding. This is a binding for a custom wrapper around the 
    SplitInstallManager from Google.Play.Core. It is required due to some 
    incompatibilities in the google API (It uses generics).
 
@@ -49,7 +53,7 @@ in the final `aab` file as dynamic features.
 ## Defining an Asset Pack
 
 To create a feature you need a few things. The first is a `Microsoft.Build.NoTargets` project
-which imports the `Targets\DynamicFeatures.targets` file. See `AssetFeature\AssetFeature.csproj` for an 
+which imports the `Targets\DynamicFeatures.targets` file. See `OnDemand\AssetFeature\AssetFeature.csproj` for an 
 example.
 
 Next you need an `AndroidManifest.xml` file. This is where you define how they "Feature" will be
@@ -61,9 +65,21 @@ The `package` attriute on the `manifest` element MUST match the value of the mai
 And finally the `split` value is the name which the "Feature" will be called in the final package
 and when you install via the `AssetPackManager` API. This is not user facing. 
 
-## Installing an Asset Pack
+## Installing and Install Time Asset Pack
 
-You need to use the `AssetPackManager` to install asset packs, this is available in the 
+Install time asset packs as installed along side your app during the installation 
+process. There is no additional work needed to download them.
+
+Accessing these assets can be done via the normal `Assets` property on your main 
+Activity. 
+
+```
+var stream = Assets.Open ("Foo.txt");
+```
+
+## Installing an On Demand Asset Pack
+
+You need to use the `AssetPackManager` to install on-demand asset packs, this is available in the 
 `Xamarin.Google.Android.Play.Core"` NuGet Package. However due to the API using Java Generics you cannot 
 use all the `AssetPackManager` directly. This is why we have a `PlayCoreHelperBinding` project.
 This project contains a non generic Java Wrapper around the `AssetPackManager` which allows us to 
