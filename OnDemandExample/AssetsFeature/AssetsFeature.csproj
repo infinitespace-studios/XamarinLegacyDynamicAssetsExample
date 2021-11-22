@@ -25,5 +25,5 @@
       <Folder Include="Assets\" />
     </ItemGroup>
     <!-- Import the Dynamic Feature targets. -->
-    <Import Project="..\Targets\DynamicFeature.targets" />
+    <Import Project="..\..\Targets\DynamicFeature.targets" />
 </Project>
