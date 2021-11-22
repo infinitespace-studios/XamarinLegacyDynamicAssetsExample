@@ -125,7 +125,7 @@
       <DynamicFeature>true</DynamicFeature>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
-    <ProjectReference Include="..\PlayCoreHelperBinding\PlayCoreHelperBinding.csproj">
+    <ProjectReference Include="..\..\PlayCoreHelperBinding\PlayCoreHelperBinding.csproj">
       <Project>{0FA1DE56-E4A5-451C-B5D4-D3BEB5B01AEE}</Project>
       <Name>PlayCoreHelperBinding</Name>
     </ProjectReference>
@@ -133,5 +133,5 @@
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
 
   <!-- Import the Dynamic Feature targets. -->
-  <Import Project="..\Targets\DynamicFeature.targets" />
+  <Import Project="..\..\Targets\DynamicFeature.targets" />
 </Project>
