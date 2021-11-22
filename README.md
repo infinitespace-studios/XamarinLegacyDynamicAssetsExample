@@ -53,8 +53,7 @@ in the final `aab` file as dynamic features.
 ## Defining an Asset Pack
 
 To create a feature you need a few things. The first is a `Microsoft.Build.NoTargets` project
-which imports the `Targets\DynamicFeatures.targets` file. See `OnDemand\AssetFeature\AssetFeature.csproj` for an 
-example.
+which imports the `Targets\DynamicFeatures.targets` file. See `OnDemand\AssetFeature\AssetFeature.csproj` or `InstallTime\AssetFeature\AssetFeature.csproj`  for an example.
 
 Next you need an `AndroidManifest.xml` file. This is where you define how they "Feature" will be
 installed via the `dist:module` and `dist:delivery` elements. 
