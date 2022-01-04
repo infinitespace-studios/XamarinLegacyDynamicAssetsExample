@@ -3,7 +3,7 @@ An Example of using Dynamic Asset Delivery with Xamarin Android.
 
 ## Project Layout
 
-The solution is made up of 5 projects.
+The solution is made up of 4 projects.
 
 1. OnDemand/OnDemandExample. This is the main Xamarin.Android application for the
    OnDemand Example.
@@ -11,9 +11,6 @@ The solution is made up of 5 projects.
 3. InstallTime/InstallTimeExample. This is the main Xamarin.Android application for the
    InstallTime Example.
 4. InstallTime/AssetsFeature. This is the project for the Asset only dynamic feature.
-5. PlayCoreHelperbinding. This is a binding for a custom wrapper around the 
-   SplitInstallManager from Google.Play.Core. It is required due to some 
-   incompatibilities in the google API (It uses generics).
 
 There is a `global.json` file which pulls in the `Microsoft.Build.NoTargets` SDK
 which we use for the "Feature" projects. This is so they do not produce an assembly. 
@@ -80,8 +77,8 @@ var stream = Assets.Open ("Foo.txt");
 
 You need to use the `AssetPackManager` to install on-demand asset packs, this is available in the 
 `Xamarin.Google.Android.Play.Core"` NuGet Package. However due to the API using Java Generics you cannot 
-use all the `AssetPackManager` directly. This is why we have a `PlayCoreHelperBinding` project.
-This project contains a non generic Java Wrapper around the `AssetPackManager` which allows us to 
+use all the `AssetPackManager` directly. The `Xamarin.Google.Android.Play.Core` version `1.10.2.3` contains
+a non generic Java Wrapper around the `AssetPackManager` which allows us to 
 capture events from the `OnStatusUpdate` method. This lets us get feedback while we are installing
 "Features".
 
@@ -99,7 +96,7 @@ AssetPackStateUpdateListenerWrapper listener;
 
 The `IAssetPackManager` is the C# version of the `AssetPackManager` Java interface. The
 `AssetPackStateUpdateListenerWrapper` class is the C# version of our `AssetPackStateUpdateListenerWrapper`
-which comes from `PlayCoreHelperBinding`. This is the class which wraps the Java `AssetPackStateUpdateListener` from  the generic based google API and exposes a non generic API.
+which comes from The `Xamarin.Google.Android.Play.Core`. This is the class which wraps the Java `AssetPackStateUpdateListener` from  the generic based google API and exposes a non generic API.
 
 We now need to create both of these classes in the `OnCreate` method. This can probably be done elsewhere,
 but for the example we do this in `OnCreate`.
