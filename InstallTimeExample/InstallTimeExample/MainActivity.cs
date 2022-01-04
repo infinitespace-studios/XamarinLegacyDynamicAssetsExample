@@ -7,13 +7,6 @@ using Android.Views;
 using AndroidX.AppCompat.Widget;
 using AndroidX.AppCompat.App;
 using Google.Android.Material.FloatingActionButton;
-using Google.Android.Material.Snackbar;
-using Xamarin.Google.Android.Play.Core.SplitInstall;
-using Xamarin.Google.Android.Play.Core.SplitInstall.Testing;
-using Xamarin.Google.Android.Play.Core.SplitInstall.Model;
-using Android.Content;
-using Xamarin.Google.Android.Play.Core.AssetPacks;
-using Xamarin.Google.Android.Play.Core.AssetPacks.Model;
 
 namespace LegacyDynamicAssetsExample
 {
