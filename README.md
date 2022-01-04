@@ -96,7 +96,7 @@ AssetPackStateUpdateListenerWrapper listener;
 
 The `IAssetPackManager` is the C# version of the `AssetPackManager` Java interface. The
 `AssetPackStateUpdateListenerWrapper` class is the C# version of our `AssetPackStateUpdateListenerWrapper`
-which comes from The `Xamarin.Google.Android.Play.Core`. This is the class which wraps the Java `AssetPackStateUpdateListener` from  the generic based google API and exposes a non generic API.
+which comes from the `Xamarin.Google.Android.Play.Core`. This is the class which wraps the Java `AssetPackStateUpdateListener` from the generic based google API and exposes a non generic API.
 
 We now need to create both of these classes in the `OnCreate` method. This can probably be done elsewhere,
 but for the example we do this in `OnCreate`.
